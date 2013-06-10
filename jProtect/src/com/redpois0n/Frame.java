@@ -5,6 +5,8 @@ import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -61,7 +63,14 @@ public class Frame extends JFrame {
 		JLabel lblPassword = new JLabel("Password:");
 		
 		txtPassword = new JTextField();
-		txtPassword.setText("password");
+		txtPassword.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				update();
+			}
+		});
+		txtPassword.setBackground(Color.GREEN);
+		txtPassword.setText("passwordpassword");
 		txtPassword.setColumns(10);
 		
 		JButton btnGenerate = new JButton("Generate");
@@ -73,7 +82,7 @@ public class Frame extends JFrame {
 					File file = c.getSelectedFile();
 					
 					if (file != null) {
-						Build.build(new File(txtInput.getText()), file, txtPassword.getText());
+						Build.build(new File(txtInput.getText()), file, txtPassword.getText().trim());
 						JOptionPane.showMessageDialog(null, "Build file to: " + file.getAbsolutePath(), "jProtect", JOptionPane.INFORMATION_MESSAGE);
 					}
 				} catch (Exception ex) {
@@ -99,6 +108,12 @@ public class Frame extends JFrame {
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap(95, Short.MAX_VALUE)
+					.addComponent(lblHttpredpoisncom)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnGenerate)
+					.addContainerGap())
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addComponent(lblPassword)
@@ -111,12 +126,6 @@ public class Frame extends JFrame {
 							.addComponent(button))
 						.addComponent(txtPassword, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(95, Short.MAX_VALUE)
-					.addComponent(lblHttpredpoisncom)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnGenerate)
-					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -130,11 +139,21 @@ public class Frame extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblPassword)
 						.addComponent(txtPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnGenerate)
 						.addComponent(lblHttpredpoisncom)))
 		);
 		contentPane.setLayout(gl_contentPane);
+	}
+	
+	public void update() {
+		int len = txtPassword.getText().trim().length();
+		
+		if (len == 16) {
+			txtPassword.setBackground(Color.green);
+		} else {
+			txtPassword.setBackground(Color.yellow);
+		}
 	}
 }

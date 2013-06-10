@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.math.BigInteger;
 import java.security.Key;
 import java.security.MessageDigest;
 
@@ -24,7 +23,14 @@ public class Main {
 			throw new Exception("Empty key");
 		}
 		
-		input = getMd5(input);
+		byte[] keyBytes;
+		
+		if (input.length() == 16) {
+			keyBytes = input.getBytes("UTF-8");
+		} else {
+			keyBytes = getMd5(input);
+		}
+		
 
 		JFileChooser c = new JFileChooser();
 		c.showSaveDialog(null);
@@ -35,8 +41,8 @@ public class Main {
 
 		InputStream in = Main.class.getResourceAsStream("/file.dat");
 
-		Cipher dcipher = Cipher.getInstance("DESede");
-		Key key = new SecretKeySpec(input.getBytes("UTF-8"), "DESede");
+		Cipher dcipher = Cipher.getInstance("AES");
+		Key key = new SecretKeySpec(keyBytes, "AES");
 		dcipher.init(Cipher.DECRYPT_MODE, key);
 
 		CipherInputStream cis = new CipherInputStream(in, dcipher);
@@ -52,12 +58,11 @@ public class Main {
 		cis.close();
 	}
 
-	public static String getMd5(String str) throws Exception {
+	public static byte[] getMd5(String str) throws Exception {
 		MessageDigest md5 = MessageDigest.getInstance("MD5");
 		md5.reset();
 		md5.update(str.getBytes());
-		BigInteger i = new BigInteger(1, md5.digest());
-		return String.format("%1$024X", i).substring(0, 24);
+		return md5.digest();
 	}
 
 }

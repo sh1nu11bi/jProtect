@@ -14,15 +14,15 @@ import javax.crypto.spec.SecretKeySpec;
 public class FileCrypter {
 
 	@SuppressWarnings("resource")
-	public static void decrypt(String key, File input, File output) throws Exception {
+	public static void decrypt(byte[] key, File input, File output) throws Exception {
 		byte[] buffer = new byte[1024];
 
 		InputStream in = new FileInputStream(input);
 		OutputStream out = new FileOutputStream(output);
 
-		Cipher cipher = Cipher.getInstance("DESede");
+		Cipher cipher = Cipher.getInstance("AES");
 
-		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getBytes("UTF-8"), "DESede"));
+		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "AES"));
 
 		in = new CipherInputStream(in, cipher);
 
@@ -35,15 +35,15 @@ public class FileCrypter {
 	}
 
 	@SuppressWarnings("resource")
-	public static void encrypt(String key, File input, File output) throws Exception {
+	public static void encrypt(byte[] key, File input, File output) throws Exception {
 		byte[] buffer = new byte[1024];
 
 		InputStream in = new FileInputStream(input);
 		OutputStream out = new FileOutputStream(output);
 
-		Cipher cipher = Cipher.getInstance("DESede");
+		Cipher cipher = Cipher.getInstance("AES");
 
-		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getBytes("UTF-8"), "DESede"));
+		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "AES"));
 
 		out = new CipherOutputStream(out, cipher);
 
